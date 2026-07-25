@@ -1,0 +1,3 @@
+.attendance-shell { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+.actions { display: flex; gap: 12px; }
+table { width: 100%; }

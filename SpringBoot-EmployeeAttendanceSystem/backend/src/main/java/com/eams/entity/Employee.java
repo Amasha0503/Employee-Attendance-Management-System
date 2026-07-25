@@ -56,6 +56,9 @@ public class Employee {
     @Column(name = "department", length = 100)
     private String department;
 
+    @Column(name = "designation", length = 100)
+    private String designation;
+
     @Column(name = "join_date")
     private LocalDate joinDate;
 

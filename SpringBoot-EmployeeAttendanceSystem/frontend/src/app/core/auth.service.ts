@@ -30,6 +30,11 @@ export class AuthService {
     return !!this.getToken();
   }
 
+  getUsername(): string | null {
+    const user = this.getStoredUser();
+    return user?.username ?? null;
+  }
+
   getToken(): string | null {
     return sessionStorage.getItem(this.storageKey);
   }

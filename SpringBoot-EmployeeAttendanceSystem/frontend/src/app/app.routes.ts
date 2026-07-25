@@ -20,7 +20,22 @@ export const routes: Routes = [
         path: 'admin',
         canActivate: [RoleGuard],
         data: { role: 'ADMIN' },
-        loadComponent: () => import('./home/home.component').then((module) => module.HomeComponent)
+        loadComponent: () => import('./features/admin/admin.component').then((module) => module.AdminComponent)
+      },
+      {
+        path: 'attendance',
+        canActivate: [AuthGuard],
+        loadComponent: () => import('./features/attendance/attendance.component').then((module) => module.AttendanceComponent)
+      },
+      {
+        path: 'leave',
+        canActivate: [AuthGuard],
+        loadComponent: () => import('./features/leave/leave.component').then((module) => module.LeaveComponent)
+      },
+      {
+        path: 'overtime',
+        canActivate: [AuthGuard],
+        loadComponent: () => import('./features/overtime/overtime.component').then((module) => module.OvertimeComponent)
       }
     ]
   },

@@ -1,0 +1,4 @@
+.admin-shell { padding: 24px; display: flex; flex-direction: column; gap: 24px; }
+form { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 16px; }
+button { width: fit-content; }
+table { width: 100%; }
