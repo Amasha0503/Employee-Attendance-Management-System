@@ -23,6 +23,11 @@ export const routes: Routes = [
         loadComponent: () => import('./features/admin/admin.component').then((module) => module.AdminComponent)
       },
       {
+        path: 'dashboard',
+        canActivate: [AuthGuard],
+        loadComponent: () => import('./features/dashboard/dashboard.component').then((module) => module.DashboardComponent)
+      },
+      {
         path: 'attendance',
         canActivate: [AuthGuard],
         loadComponent: () => import('./features/attendance/attendance.component').then((module) => module.AttendanceComponent)
@@ -41,6 +46,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'login'
+    loadComponent: () => import('./features/not-found/not-found.component').then((module) => module.NotFoundComponent)
   }
 ];

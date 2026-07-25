@@ -81,8 +81,8 @@ public class AttendanceServiceImpl implements AttendanceService {
             return "PRESENT";
         }
         LocalTime start = shift.getStartTime();
-        LocalTime grace = shift.getGraceMinutes() != null ? shift.getGraceMinutes().longValue() : 10L;
-        LocalTime allowed = start.plusMinutes(grace);
+        long graceMinutes = shift.getGraceMinutes() != null ? shift.getGraceMinutes().longValue() : 10L;
+        LocalTime allowed = start.plusMinutes(graceMinutes);
         return checkIn.toLocalTime().isAfter(allowed) ? "LATE" : "PRESENT";
     }
 
