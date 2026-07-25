@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 
 export interface AuthResponse {
@@ -14,7 +15,7 @@ export class AuthService {
   private readonly userKey = 'eams-user';
   private readonly apiUrl = 'http://localhost:8080/api/v1/auth/login';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   login(username: string, password: string): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(this.apiUrl, { username, password }).pipe(
@@ -25,6 +26,7 @@ export class AuthService {
   logout(): void {
     sessionStorage.removeItem(this.storageKey);
     sessionStorage.removeItem(this.userKey);
+    this.router.navigate(['/login']);
   }
 
   isAuthenticated(): boolean {

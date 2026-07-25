@@ -15,6 +15,10 @@ export class RoleGuard implements CanActivate {
       return true;
     }
 
+    if (this.authService.isLoggedIn()) {
+      return this.router.createUrlTree(['/attendance']);
+    }
+
     return this.router.createUrlTree(['/login']);
   }
 }

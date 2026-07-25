@@ -14,7 +14,7 @@ import { AuthService } from '../core/auth.service';
   template: `
     <header class="app-header" *ngIf="authService.isLoggedIn()">
       <div class="navbar-content">
-        <div class="brand" routerLink="/dashboard">
+        <div class="brand" [routerLink]="authService.getUserRole() === 'ADMIN' ? '/dashboard' : '/attendance'">
           <div class="logo-icon">
             <mat-icon>schedule</mat-icon>
           </div>
@@ -22,7 +22,7 @@ import { AuthService } from '../core/auth.service';
         </div>
 
         <nav class="nav-links">
-          <a mat-button routerLink="/dashboard" routerLinkActive="active" class="nav-btn">
+          <a mat-button *ngIf="authService.getUserRole() === 'ADMIN'" routerLink="/dashboard" routerLinkActive="active" class="nav-btn">
             <mat-icon>dashboard</mat-icon> Dashboard
           </a>
           <a mat-button routerLink="/attendance" routerLinkActive="active" class="nav-btn">

@@ -69,7 +69,7 @@ import { NotificationService } from '../../shared/notification.service';
           <span class="hint-title">Quick Demo Credentials:</span>
           <div class="hint-chips">
             <span class="hint-chip" (click)="fillDemo('admin', 'admin123')">🔑 Admin: admin / admin123</span>
-            <span class="hint-chip" (click)="fillDemo('john_doe', 'user123')">👤 Employee: john_doe / user123</span>
+            <span class="hint-chip" (click)="fillDemo('nimal_perera', 'user123')">👤 Employee: nimal_perera / user123</span>
           </div>
         </div>
       </mat-card>
@@ -235,10 +235,15 @@ export class LoginComponent {
 
     this.loading = true;
     this.authService.login(this.form.value.username, this.form.value.password).subscribe({
-      next: () => {
+      next: (res) => {
         this.loading = false;
         this.notificationService.showSuccess('Welcome back! Login successful.');
-        this.router.navigate(['/dashboard']);
+        const role = res?.role || this.authService.getRole();
+        if (role === 'ADMIN') {
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.router.navigate(['/attendance']);
+        }
       },
       error: (err) => {
         this.loading = false;

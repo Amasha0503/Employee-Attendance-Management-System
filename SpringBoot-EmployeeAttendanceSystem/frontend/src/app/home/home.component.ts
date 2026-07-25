@@ -19,7 +19,7 @@ import { AuthService } from '../core/auth.service';
           Welcome, {{ authService.getUsername() || 'Employee' }}! Access your attendance check-ins, request leaves and overtime, and monitor real-time department analytics.
         </p>
         <div class="hero-actions">
-          <button mat-raised-button color="primary" routerLink="/dashboard">
+          <button *ngIf="authService.getUserRole() === 'ADMIN'" mat-raised-button color="primary" routerLink="/dashboard">
             <mat-icon>dashboard</mat-icon> Open Dashboard
           </button>
           <button mat-stroked-button routerLink="/attendance">
@@ -56,7 +56,7 @@ import { AuthService } from '../core/auth.service';
           <span class="card-link">Launch Module &rarr;</span>
         </mat-card>
 
-        <mat-card class="portal-card" routerLink="/dashboard">
+        <mat-card *ngIf="authService.getUserRole() === 'ADMIN'" class="portal-card" routerLink="/dashboard">
           <div class="card-icon purple">
             <mat-icon>analytics</mat-icon>
           </div>
@@ -168,9 +168,12 @@ export class HomeComponent implements OnInit {
   constructor(public authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    // Redirect logged in users directly to dashboard
     if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/dashboard']);
+      if (this.authService.getUserRole() === 'ADMIN') {
+        this.router.navigate(['/dashboard']);
+      } else {
+        this.router.navigate(['/attendance']);
+      }
     }
   }
 }

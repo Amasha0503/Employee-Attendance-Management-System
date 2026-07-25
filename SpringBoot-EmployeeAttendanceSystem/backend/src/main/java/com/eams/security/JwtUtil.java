@@ -50,6 +50,7 @@ public class JwtUtil {
                     .parseClaimsJws(token);
             return true;
         } catch (Exception ex) {
+            System.err.println("JWT validation error: " + ex.getMessage());
             return false;
         }
     }

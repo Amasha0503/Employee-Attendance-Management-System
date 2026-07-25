@@ -50,25 +50,23 @@ public class DataInitializer implements CommandLineRunner {
         System.out.println("=== ADMIN USER SEEDED / UPDATED ===");
 
         // Seed or update Demo Employee User & Profile
-        User empUser = userRepository.findByUsername("john_doe").orElseGet(User::new);
-        empUser.setUsername("john_doe");
+        User empUser = userRepository.findByUsername("nimal_perera").orElseGet(User::new);
+        empUser.setUsername("nimal_perera");
         empUser.setPassword(passwordEncoder.encode("user123"));
         empUser.setRole(employeeRole);
         empUser.setActive(true);
         User savedUser = userRepository.save(empUser);
-        System.out.println("=== JOHN_DOE USER SEEDED / UPDATED ===");
+        System.out.println("=== NIMAL_PERERA USER SEEDED / UPDATED ===");
 
-        if (employeeRepository.findAll().isEmpty()) {
-            Employee emp = new Employee();
-            emp.setUser(savedUser);
-            emp.setFirstName("John");
-            emp.setLastName("Doe");
-            emp.setEmail("john.doe@company.com");
-            emp.setPhone("+1234567890");
-            emp.setDepartment("Engineering");
-            emp.setStatus("ACTIVE");
-            employeeRepository.save(emp);
-            System.out.println("=== JOHN_DOE PROFILE SEEDED ===");
-        }
+        Employee emp = employeeRepository.findByUserUsername("nimal_perera").orElseGet(Employee::new);
+        emp.setUser(savedUser);
+        emp.setFirstName("Nimal");
+        emp.setLastName("Perera");
+        emp.setEmail("nimalperera@gmail.com");
+        if (emp.getPhone() == null) emp.setPhone("+1234567890");
+        if (emp.getDepartment() == null) emp.setDepartment("Engineering");
+        emp.setStatus("ACTIVE");
+        employeeRepository.save(emp);
+        System.out.println("=== NIMAL PERERA PROFILE ENSURED ACTIVE ===");
     }
 }
