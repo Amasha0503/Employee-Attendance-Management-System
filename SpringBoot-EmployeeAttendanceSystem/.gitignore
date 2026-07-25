@@ -1,3 +1,8 @@
+backend/target/
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/.cache/
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
@@ -33,6 +38,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Node / Angular ###
+frontend/package-lock.json
 
 ### Mac OS ###
 .DS_Store
