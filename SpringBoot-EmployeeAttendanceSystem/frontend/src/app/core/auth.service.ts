@@ -30,6 +30,19 @@ export class AuthService {
     return !!this.getToken();
   }
 
+  isLoggedIn(): boolean {
+    return this.isAuthenticated();
+  }
+
+  getRole(): string | null {
+    const user = this.getStoredUser();
+    return user?.role ?? null;
+  }
+
+  getUserRole(): string | null {
+    return this.getRole();
+  }
+
   getUsername(): string | null {
     const user = this.getStoredUser();
     return user?.username ?? null;
@@ -37,11 +50,6 @@ export class AuthService {
 
   getToken(): string | null {
     return sessionStorage.getItem(this.storageKey);
-  }
-
-  getRole(): string | null {
-    const user = this.getStoredUser();
-    return user?.role ?? null;
   }
 
   private storeSession(response: AuthResponse): void {

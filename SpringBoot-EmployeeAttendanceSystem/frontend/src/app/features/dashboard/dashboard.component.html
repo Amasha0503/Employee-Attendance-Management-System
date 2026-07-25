@@ -1,60 +1,83 @@
 <div class="dashboard-container">
-  <h2>Attendance & Analytics Dashboard</h2>
+  <div class="dashboard-header">
+    <div>
+      <h2>System Dashboard & Analytics</h2>
+      <p class="subtext">Overview of daily attendance metrics, monthly trends, and report exports.</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="loadDashboardData()" class="refresh-btn">
+      <mat-icon>refresh</mat-icon> Refresh Data
+    </button>
+  </div>
 
   <div *ngIf="loading" class="spinner-container">
-    <mat-spinner></mat-spinner>
+    <mat-spinner diameter="48"></mat-spinner>
+    <p>Loading real-time analytics...</p>
   </div>
 
   <div *ngIf="!loading && summary">
-    <!-- Stat Cards -->
+    <!-- Stat Cards Grid -->
     <div class="stats-grid">
       <mat-card class="stat-card blue">
-        <mat-card-content>
-          <div class="stat-value">{{ summary.totalEmployees }}</div>
-          <div class="stat-label">Total Active Employees</div>
-        </mat-card-content>
+        <div class="stat-header">
+          <div class="icon-circle blue-icon"><mat-icon>people</mat-icon></div>
+          <span class="stat-badge">Active</span>
+        </div>
+        <div class="stat-value">{{ summary.totalEmployees }}</div>
+        <div class="stat-label">Total Active Employees</div>
       </mat-card>
 
       <mat-card class="stat-card green">
-        <mat-card-content>
-          <div class="stat-value">{{ summary.presentToday }}</div>
-          <div class="stat-label">Present Today</div>
-        </mat-card-content>
+        <div class="stat-header">
+          <div class="icon-circle green-icon"><mat-icon>check_circle</mat-icon></div>
+          <span class="stat-badge green-badge">Today</span>
+        </div>
+        <div class="stat-value">{{ summary.presentToday }}</div>
+        <div class="stat-label">Present Today</div>
       </mat-card>
 
       <mat-card class="stat-card orange">
-        <mat-card-content>
-          <div class="stat-value">{{ summary.lateToday }}</div>
-          <div class="stat-label">Late Arrivals Today</div>
-        </mat-card-content>
+        <div class="stat-header">
+          <div class="icon-circle orange-icon"><mat-icon>running_with_errors</mat-icon></div>
+          <span class="stat-badge orange-badge">Attention</span>
+        </div>
+        <div class="stat-value">{{ summary.lateToday }}</div>
+        <div class="stat-label">Late Arrivals Today</div>
       </mat-card>
 
       <mat-card class="stat-card red">
-        <mat-card-content>
-          <div class="stat-value">{{ summary.absentToday }}</div>
-          <div class="stat-label">Absent Today</div>
-        </mat-card-content>
+        <div class="stat-header">
+          <div class="icon-circle red-icon"><mat-icon>cancel</mat-icon></div>
+          <span class="stat-badge red-badge">Absence</span>
+        </div>
+        <div class="stat-value">{{ summary.absentToday }}</div>
+        <div class="stat-label">Absent Today</div>
       </mat-card>
 
       <mat-card class="stat-card purple">
-        <mat-card-content>
-          <div class="stat-value">{{ summary.pendingLeaves }}</div>
-          <div class="stat-label">Pending Leave Requests</div>
-        </mat-card-content>
+        <div class="stat-header">
+          <div class="icon-circle purple-icon"><mat-icon>event_busy</mat-icon></div>
+          <span class="stat-badge purple-badge">Pending</span>
+        </div>
+        <div class="stat-value">{{ summary.pendingLeaves }}</div>
+        <div class="stat-label">Pending Leave Requests</div>
       </mat-card>
 
       <mat-card class="stat-card teal">
-        <mat-card-content>
-          <div class="stat-value">{{ summary.pendingOvertime }}</div>
-          <div class="stat-label">Pending Overtime Requests</div>
-        </mat-card-content>
+        <div class="stat-header">
+          <div class="icon-circle teal-icon"><mat-icon>more_time</mat-icon></div>
+          <span class="stat-badge teal-badge">Pending</span>
+        </div>
+        <div class="stat-value">{{ summary.pendingOvertime }}</div>
+        <div class="stat-label">Pending Overtime Requests</div>
       </mat-card>
     </div>
 
     <!-- Chart Section -->
     <mat-card class="chart-card">
-      <mat-card-header>
-        <mat-card-title>Attendance Breakdown Chart</mat-card-title>
+      <mat-card-header class="chart-header">
+        <mat-card-title>
+          <mat-icon class="title-icon">bar_chart</mat-icon> Attendance Breakdown & Trends
+        </mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <div class="chart-container">
@@ -65,52 +88,92 @@
 
     <!-- Admin Reports & Analytics Section -->
     <div *ngIf="isAdmin" class="reports-section">
-      <h3>Admin Reports & Analytics Exports</h3>
-      <mat-card class="export-card">
-        <mat-card-content>
-          <div class="report-grid">
-            <div class="report-item">
-              <span class="report-title">Daily Attendance Sheet</span>
-              <div class="btn-group">
-                <button mat-stroked-button color="primary" (click)="downloadReport('daily-attendance', 'csv')">CSV</button>
-                <button mat-raised-button color="primary" (click)="downloadReport('daily-attendance', 'pdf')">PDF</button>
-              </div>
-            </div>
+      <div class="section-title">
+        <h3><mat-icon>download</mat-icon> Admin Reports & Analytics Exports</h3>
+        <p>Download official attendance, leave, and overtime records in CSV or PDF formats.</p>
+      </div>
 
-            <div class="report-item">
-              <span class="report-title">Monthly Attendance Summary</span>
-              <div class="btn-group">
-                <button mat-stroked-button color="primary" (click)="downloadReport('monthly-summary', 'csv')">CSV</button>
-                <button mat-raised-button color="primary" (click)="downloadReport('monthly-summary', 'pdf')">PDF</button>
-              </div>
-            </div>
-
-            <div class="report-item">
-              <span class="report-title">Leave Utilization Report</span>
-              <div class="btn-group">
-                <button mat-stroked-button color="primary" (click)="downloadReport('leave-utilization', 'csv')">CSV</button>
-                <button mat-raised-button color="primary" (click)="downloadReport('leave-utilization', 'pdf')">PDF</button>
-              </div>
-            </div>
-
-            <div class="report-item">
-              <span class="report-title">Overtime Summary Report</span>
-              <div class="btn-group">
-                <button mat-stroked-button color="primary" (click)="downloadReport('overtime-report', 'csv')">CSV</button>
-                <button mat-raised-button color="primary" (click)="downloadReport('overtime-report', 'pdf')">PDF</button>
-              </div>
-            </div>
-
-            <div class="report-item">
-              <span class="report-title">Late / Early Trend Analysis</span>
-              <div class="btn-group">
-                <button mat-stroked-button color="primary" (click)="downloadReport('late-early-trend', 'csv')">CSV</button>
-                <button mat-raised-button color="primary" (click)="downloadReport('late-early-trend', 'pdf')">PDF</button>
-              </div>
-            </div>
+      <div class="report-grid">
+        <mat-card class="report-item-card">
+          <div class="report-icon-box"><mat-icon>today</mat-icon></div>
+          <div class="report-info">
+            <span class="report-title">Daily Attendance Sheet</span>
+            <span class="report-desc">Comprehensive record of employee check-ins and check-outs for today.</span>
           </div>
-        </mat-card-content>
-      </mat-card>
+          <div class="btn-group">
+            <button mat-stroked-button color="primary" (click)="downloadReport('daily-attendance', 'csv')">
+              <mat-icon>description</mat-icon> CSV
+            </button>
+            <button mat-raised-button color="primary" (click)="downloadReport('daily-attendance', 'pdf')">
+              <mat-icon>picture_as_pdf</mat-icon> PDF
+            </button>
+          </div>
+        </mat-card>
+
+        <mat-card class="report-item-card">
+          <div class="report-icon-box"><mat-icon>calendar_month</mat-icon></div>
+          <div class="report-info">
+            <span class="report-title">Monthly Attendance Summary</span>
+            <span class="report-desc">Monthly totals for present, late, and absent days.</span>
+          </div>
+          <div class="btn-group">
+            <button mat-stroked-button color="primary" (click)="downloadReport('monthly-summary', 'csv')">
+              <mat-icon>description</mat-icon> CSV
+            </button>
+            <button mat-raised-button color="primary" (click)="downloadReport('monthly-summary', 'pdf')">
+              <mat-icon>picture_as_pdf</mat-icon> PDF
+            </button>
+          </div>
+        </mat-card>
+
+        <mat-card class="report-item-card">
+          <div class="report-icon-box"><mat-icon>pie_chart</mat-icon></div>
+          <div class="report-info">
+            <span class="report-title">Leave Utilization Report</span>
+            <span class="report-desc">Leave balances and approval status across leave types.</span>
+          </div>
+          <div class="btn-group">
+            <button mat-stroked-button color="primary" (click)="downloadReport('leave-utilization', 'csv')">
+              <mat-icon>description</mat-icon> CSV
+            </button>
+            <button mat-raised-button color="primary" (click)="downloadReport('leave-utilization', 'pdf')">
+              <mat-icon>picture_as_pdf</mat-icon> PDF
+            </button>
+          </div>
+        </mat-card>
+
+        <mat-card class="report-item-card">
+          <div class="report-icon-box"><mat-icon>av_timer</mat-icon></div>
+          <div class="report-info">
+            <span class="report-title">Overtime Summary Report</span>
+            <span class="report-desc">Approved overtime hours per employee for payroll auditing.</span>
+          </div>
+          <div class="btn-group">
+            <button mat-stroked-button color="primary" (click)="downloadReport('overtime-report', 'csv')">
+              <mat-icon>description</mat-icon> CSV
+            </button>
+            <button mat-raised-button color="primary" (click)="downloadReport('overtime-report', 'pdf')">
+              <mat-icon>picture_as_pdf</mat-icon> PDF
+            </button>
+          </div>
+        </mat-card>
+
+        <mat-card class="report-item-card">
+          <div class="report-icon-box"><mat-icon>show_chart</mat-icon></div>
+          <div class="report-info">
+            <span class="report-title">Late / Early Trend Analysis</span>
+            <span class="report-desc">Department breakdown of late check-in and early exit counts.</span>
+          </div>
+          <div class="btn-group">
+            <button mat-stroked-button color="primary" (click)="downloadReport('late-early-trend', 'csv')">
+              <mat-icon>description</mat-icon> CSV
+            </button>
+            <button mat-raised-button color="primary" (click)="downloadReport('late-early-trend', 'pdf')">
+              <mat-icon>picture_as_pdf</mat-icon> PDF
+            </button>
+          </div>
+        </mat-card>
+      </div>
     </div>
   </div>
 </div>

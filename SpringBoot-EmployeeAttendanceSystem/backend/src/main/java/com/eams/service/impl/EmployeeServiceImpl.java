@@ -68,7 +68,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setEmail(request.getEmail());
         employee.setPhone(request.getPhone());
         employee.setDepartment(request.getDepartment());
-        employee.setDesignation(request.getDesignation());
 
         if (request.getShiftId() != null) {
             Shift shift = shiftRepository.findById(request.getShiftId()).orElseThrow(() -> new IllegalArgumentException("Shift not found"));
@@ -84,7 +83,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 employee.getEmail(),
                 employee.getPhone(),
                 employee.getDepartment(),
-                employee.getDesignation(),
+                null,
                 employee.getShift() != null ? employee.getShift().getShiftId() : null,
                 employee.getShift() != null ? employee.getShift().getShiftName() : null,
                 employee.getStatus()
