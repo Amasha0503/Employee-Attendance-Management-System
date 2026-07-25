@@ -1,4 +1,4 @@
-# Employee Attendance Management System — iCET Academic Project
+# Employee Attendance Management System
 
 A full-stack enterprise web application built for the **iCET Enterprise Engineering Module** to manage employee attendance, shift schedules, leave applications, overtime tracking, analytics dashboards, and report exports.
 
