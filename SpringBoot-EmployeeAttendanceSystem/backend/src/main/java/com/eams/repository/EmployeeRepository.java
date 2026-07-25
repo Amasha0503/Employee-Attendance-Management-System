@@ -9,5 +9,6 @@ import java.util.Optional;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     Optional<Employee> findByUserUserId(Integer userId);
+    Optional<Employee> findByUserUsername(String username);
     long countByStatus(String status);
 }

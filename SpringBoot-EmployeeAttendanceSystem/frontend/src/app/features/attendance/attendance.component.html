@@ -1,28 +1,96 @@
 <div class="attendance-shell">
-  <h2>Attendance</h2>
-  <div class="actions">
-    <button mat-raised-button color="primary" (click)="checkIn()">Check In</button>
-    <button mat-raised-button color="accent" (click)="checkOut()">Check Out</button>
+  <div class="header-section">
+    <div>
+      <h2>Employee Attendance & Check-In</h2>
+      <p class="subtitle">Record daily check-in and check-out timestamps with automatic late arrival detection.</p>
+    </div>
   </div>
 
-  <table mat-table [dataSource]="history" class="mat-elevation-z2">
-    <ng-container matColumnDef="attendanceDate">
-      <th mat-header-cell *matHeaderCellDef>Date</th>
-      <td mat-cell *matCellDef="let row">{{ row.attendanceDate }}</td>
-    </ng-container>
-    <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef>Status</th>
-      <td mat-cell *matCellDef="let row">{{ row.status }}</td>
-    </ng-container>
-    <ng-container matColumnDef="lateFlag">
-      <th mat-header-cell *matHeaderCellDef>Late</th>
-      <td mat-cell *matCellDef="let row">{{ row.lateFlag ? 'Yes' : 'No' }}</td>
-    </ng-container>
-    <ng-container matColumnDef="earlyDeparture">
-      <th mat-header-cell *matHeaderCellDef>Early Leave</th>
-      <td mat-cell *matCellDef="let row">{{ row.earlyDeparture ? 'Yes' : 'No' }}</td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+  <!-- Live Clock & Quick Action Banner -->
+  <mat-card class="clock-card">
+    <div class="clock-content">
+      <div class="time-display">
+        <div class="clock-icon"><mat-icon>access_time</mat-icon></div>
+        <div>
+          <div class="time-text">{{ currentTime }}</div>
+          <div class="date-text">{{ currentDate }}</div>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button mat-raised-button color="primary" class="check-btn in-btn" (click)="checkIn()" [disabled]="loading">
+          <mat-icon>login</mat-icon> Check In
+        </button>
+        <button mat-raised-button color="accent" class="check-btn out-btn" (click)="checkOut()" [disabled]="loading">
+          <mat-icon>logout</mat-icon> Check Out
+        </button>
+      </div>
+    </div>
+  </mat-card>
+
+  <!-- Attendance History Table -->
+  <mat-card class="table-card">
+    <mat-card-header class="table-header">
+      <mat-card-title><mat-icon>history</mat-icon> Personal Attendance History</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="table-responsive">
+        <table mat-table [dataSource]="history" class="modern-table">
+
+          <!-- Date Column -->
+          <ng-container matColumnDef="attendanceDate">
+            <th mat-header-cell *matHeaderCellDef>Date</th>
+            <td mat-cell *matCellDef="let row" class="bold-text">
+              {{ row.attendanceDate | date:'mediumDate' }}
+            </td>
+          </ng-container>
+
+          <!-- Check In Column -->
+          <ng-container matColumnDef="checkIn">
+            <th mat-header-cell *matHeaderCellDef>Check In</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.checkIn ? (row.checkIn | date:'shortTime') : '-' }}
+            </td>
+          </ng-container>
+
+          <!-- Check Out Column -->
+          <ng-container matColumnDef="checkOut">
+            <th mat-header-cell *matHeaderCellDef>Check Out</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.checkOut ? (row.checkOut | date:'shortTime') : '-' }}
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let row">
+              <span class="badge-chip" [ngClass]="row.status?.toLowerCase()">
+                {{ row.status || 'PENDING' }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Flags Column -->
+          <ng-container matColumnDef="flags">
+            <th mat-header-cell *matHeaderCellDef>System Detection</th>
+            <td mat-cell *matCellDef="let row">
+              <span *ngIf="row.lateFlag" class="flag-tag late-tag">
+                <mat-icon>error_outline</mat-icon> Late Check-in
+              </span>
+              <span *ngIf="row.earlyDeparture" class="flag-tag early-tag">
+                <mat-icon>schedule</mat-icon> Early Departure
+              </span>
+              <span *ngIf="!row.lateFlag && !row.earlyDeparture" class="flag-tag normal-tag">
+                <mat-icon>check_circle_outline</mat-icon> On Time
+              </span>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>

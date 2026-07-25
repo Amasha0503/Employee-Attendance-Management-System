@@ -1,3 +1,99 @@
-.overtime-shell { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-table { width: 100%; }
+.overtime-shell {
+  padding: 2rem 1.5rem;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.header-section h2 {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.25rem;
+}
+
+.subtitle {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin: 0 0 2rem;
+}
+
+.overtime-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .overtime-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-card, .table-card {
+  padding: 1.5rem;
+  border-radius: 20px !important;
+}
+
+.ot-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 1rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.submit-btn {
+  height: 48px;
+  border-radius: 12px !important;
+  font-size: 0.95rem !important;
+  margin-top: 0.5rem;
+}
+
+.table-header mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  margin-top: 1rem;
+}
+
+.modern-table {
+  width: 100%;
+}
+
+.bold-text {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.hours-badge {
+  font-weight: 700;
+  color: #0d9488;
+}
+
+.reason-cell {
+  max-width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #475569;
+}
+
+.action-btns {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.muted-text {
+  color: #94a3b8;
+}

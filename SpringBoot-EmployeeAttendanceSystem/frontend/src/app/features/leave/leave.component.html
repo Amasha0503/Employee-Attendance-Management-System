@@ -1,35 +1,117 @@
 <div class="leave-shell">
-  <h2>Leave Requests</h2>
-  <form [formGroup]="form" (ngSubmit)="submit()">
-    <mat-form-field>
-      <mat-label>Start Date</mat-label>
-      <input matInput type="date" formControlName="startDate">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>End Date</mat-label>
-      <input matInput type="date" formControlName="endDate">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Reason</mat-label>
-      <input matInput formControlName="reason">
-    </mat-form-field>
-    <button mat-raised-button color="primary" type="submit">Apply</button>
-  </form>
+  <div class="header-section">
+    <h2>Leave Management Suite</h2>
+    <p class="subtitle">Apply for time off and manage employee leave approvals.</p>
+  </div>
 
-  <table mat-table [dataSource]="leaves" class="mat-elevation-z2">
-    <ng-container matColumnDef="startDate">
-      <th mat-header-cell *matHeaderCellDef>Start</th>
-      <td mat-cell *matCellDef="let row">{{ row.startDate }}</td>
-    </ng-container>
-    <ng-container matColumnDef="endDate">
-      <th mat-header-cell *matHeaderCellDef>End</th>
-      <td mat-cell *matCellDef="let row">{{ row.endDate }}</td>
-    </ng-container>
-    <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef>Status</th>
-      <td mat-cell *matCellDef="let row">{{ row.status }}</td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+  <div class="leave-grid">
+    <!-- Apply for Leave Form Card -->
+    <mat-card class="form-card">
+      <mat-card-header>
+        <mat-card-title><mat-icon>add_task</mat-icon> Request Leave</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="submit()" class="leave-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Leave Type</mat-label>
+            <mat-select formControlName="leaveTypeId">
+              <mat-option *ngFor="let t of leaveTypes" [value]="t.id">{{ t.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div class="date-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Start Date</mat-label>
+              <input matInput type="date" formControlName="startDate">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>End Date</mat-label>
+              <input matInput type="date" formControlName="endDate">
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Reason for Leave</mat-label>
+            <textarea matInput formControlName="reason" rows="3" placeholder="Briefly describe your leave reason"></textarea>
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" type="submit" class="submit-btn" [disabled]="loading">
+            <mat-icon>send</mat-icon> Submit Leave Application
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Leave Requests Table Card -->
+    <mat-card class="table-card">
+      <mat-card-header class="table-header">
+        <mat-card-title>
+          <mat-icon>format_list_bulleted</mat-icon> 
+          {{ isAdmin ? 'All Employee Leave Applications' : 'My Leave Requests' }}
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="table-responsive">
+          <table mat-table [dataSource]="leaves" class="modern-table">
+
+            <!-- Type Column -->
+            <ng-container matColumnDef="leaveTypeName">
+              <th mat-header-cell *matHeaderCellDef>Type</th>
+              <td mat-cell *matCellDef="let row" class="bold-text">
+                {{ row.leaveTypeName || 'Leave' }}
+              </td>
+            </ng-container>
+
+            <!-- Start Date Column -->
+            <ng-container matColumnDef="startDate">
+              <th mat-header-cell *matHeaderCellDef>Start Date</th>
+              <td mat-cell *matCellDef="let row">{{ row.startDate | date:'mediumDate' }}</td>
+            </ng-container>
+
+            <!-- End Date Column -->
+            <ng-container matColumnDef="endDate">
+              <th mat-header-cell *matHeaderCellDef>End Date</th>
+              <td mat-cell *matCellDef="let row">{{ row.endDate | date:'mediumDate' }}</td>
+            </ng-container>
+
+            <!-- Reason Column -->
+            <ng-container matColumnDef="reason">
+              <th mat-header-cell *matHeaderCellDef>Reason</th>
+              <td mat-cell *matCellDef="let row" class="reason-cell">{{ row.reason }}</td>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let row">
+                <span class="badge-chip" [ngClass]="row.status?.toLowerCase()">
+                  {{ row.status }}
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Admin Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let row">
+                <div *ngIf="isAdmin && row.status === 'PENDING'" class="action-btns">
+                  <button mat-icon-button color="primary" (click)="approveOrReject(row.requestId, 'APPROVED')" matTooltip="Approve">
+                    <mat-icon>check_circle</mat-icon>
+                  </button>
+                  <button mat-icon-button color="warn" (click)="approveOrReject(row.requestId, 'REJECTED')" matTooltip="Reject">
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </div>
+                <span *ngIf="!isAdmin || row.status !== 'PENDING'" class="muted-text">-</span>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>

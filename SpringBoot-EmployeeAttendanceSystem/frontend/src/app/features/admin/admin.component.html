@@ -1,125 +1,239 @@
 <div class="admin-shell">
-  <h2>Admin Management</h2>
+  <div class="header-section">
+    <h2>Admin Management Panel</h2>
+    <p class="subtitle">Configure employees, work shifts, and company holiday calendars.</p>
+  </div>
 
-  <section>
-    <h3>Employees</h3>
-    <form [formGroup]="employeeForm" (ngSubmit)="createEmployee()">
-      <mat-form-field>
-        <mat-label>Employee ID</mat-label>
-        <input matInput formControlName="employeeId">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>First Name</mat-label>
-        <input matInput formControlName="firstName">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Last Name</mat-label>
-        <input matInput formControlName="lastName">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Phone</mat-label>
-        <input matInput formControlName="phone">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Department</mat-label>
-        <input matInput formControlName="department">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Designation</mat-label>
-        <input matInput formControlName="designation">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Shift</mat-label>
-        <input matInput formControlName="shiftId">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Status</mat-label>
-        <input matInput formControlName="status">
-      </mat-form-field>
-      <button mat-raised-button color="primary" type="submit">Save Employee</button>
-    </form>
+  <mat-tab-group animationDuration="200ms" class="admin-tabs">
 
-    <table mat-table [dataSource]="employees" class="mat-elevation-z2">
-      <ng-container matColumnDef="employeeId">
-        <th mat-header-cell *matHeaderCellDef>Employee ID</th>
-        <td mat-cell *matCellDef="let row">{{ row.employeeId }}</td>
-      </ng-container>
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let row">{{ row.firstName }} {{ row.lastName }}</td>
-      </ng-container>
-      <ng-container matColumnDef="department">
-        <th mat-header-cell *matHeaderCellDef>Department</th>
-        <td mat-cell *matCellDef="let row">{{ row.department }}</td>
-      </ng-container>
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef>Status</th>
-        <td mat-cell *matCellDef="let row">{{ row.status }}</td>
-      </ng-container>
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Actions</th>
-        <td mat-cell *matCellDef="let row">
-          <button mat-button color="warn" (click)="deactivateEmployee(row.employeeId)">Deactivate</button>
-        </td>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-  </section>
+    <!-- Tab 1: Employee Management -->
+    <mat-tab label="Employees">
+      <ng-template matTabLabel>
+        <mat-icon class="tab-icon">people</mat-icon> Employees
+      </ng-template>
 
-  <section>
-    <h3>Shifts</h3>
-    <form [formGroup]="shiftForm" (ngSubmit)="createShift()">
-      <mat-form-field>
-        <mat-label>Shift Name</mat-label>
-        <input matInput formControlName="shiftName">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Start Time</mat-label>
-        <input matInput formControlName="startTime" type="time">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>End Time</mat-label>
-        <input matInput formControlName="endTime" type="time">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Grace Minutes</mat-label>
-        <input matInput formControlName="graceMinutes" type="number">
-      </mat-form-field>
-      <button mat-raised-button color="primary" type="submit">Save Shift</button>
-    </form>
+      <div class="tab-content">
+        <div class="admin-grid">
+          <!-- Add Employee Form -->
+          <mat-card class="form-card">
+            <mat-card-header>
+              <mat-card-title><mat-icon>person_add</mat-icon> Register New Employee</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <form [formGroup]="employeeForm" (ngSubmit)="createEmployee()" class="grid-form">
+                <mat-form-field appearance="outline">
+                  <mat-label>Employee ID Code</mat-label>
+                  <input matInput type="number" formControlName="employeeId" placeholder="e.g. 101">
+                </mat-form-field>
 
-    <ul>
-      <li *ngFor="let shift of shifts">
-        {{ shift.shiftName }} ({{ shift.startTime }} - {{ shift.endTime }})
-        <button mat-button color="warn" (click)="deleteShift(shift.shiftId)">Delete</button>
-      </li>
-    </ul>
-  </section>
+                <mat-form-field appearance="outline">
+                  <mat-label>First Name</mat-label>
+                  <input matInput formControlName="firstName">
+                </mat-form-field>
 
-  <section>
-    <h3>Holidays</h3>
-    <form [formGroup]="holidayForm" (ngSubmit)="createHoliday()">
-      <mat-form-field>
-        <mat-label>Holiday Name</mat-label>
-        <input matInput formControlName="holidayName">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Holiday Date</mat-label>
-        <input matInput formControlName="holidayDate" type="date">
-      </mat-form-field>
-      <button mat-raised-button color="primary" type="submit">Save Holiday</button>
-    </form>
+                <mat-form-field appearance="outline">
+                  <mat-label>Last Name</mat-label>
+                  <input matInput formControlName="lastName">
+                </mat-form-field>
 
-    <ul>
-      <li *ngFor="let holiday of holidays">
-        {{ holiday.holidayName }} - {{ holiday.holidayDate }}
-        <button mat-button color="warn" (click)="deleteHoliday(holiday.holidayId)">Delete</button>
-      </li>
-    </ul>
-  </section>
+                <mat-form-field appearance="outline">
+                  <mat-label>Email Address</mat-label>
+                  <input matInput type="email" formControlName="email">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Phone Number</mat-label>
+                  <input matInput formControlName="phone">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Department</mat-label>
+                  <input matInput formControlName="department">
+                </mat-form-field>
+
+                <button mat-raised-button color="primary" type="submit" class="submit-btn full-grid">
+                  <mat-icon>save</mat-icon> Save Employee Profile
+                </button>
+              </form>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Employees Table -->
+          <mat-card class="table-card">
+            <mat-card-header>
+              <mat-card-title><mat-icon>badge</mat-icon> Employee Directory</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="table-responsive">
+                <table mat-table [dataSource]="employees" class="modern-table">
+                  <ng-container matColumnDef="employeeId">
+                    <th mat-header-cell *matHeaderCellDef>ID</th>
+                    <td mat-cell *matCellDef="let row" class="bold-text">#{{ row.employeeId }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef>Name</th>
+                    <td mat-cell *matCellDef="let row">{{ row.firstName }} {{ row.lastName }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef>Email</th>
+                    <td mat-cell *matCellDef="let row" class="email-cell">{{ row.email }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="department">
+                    <th mat-header-cell *matHeaderCellDef>Department</th>
+                    <td mat-cell *matCellDef="let row">{{ row.department }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef>Status</th>
+                    <td mat-cell *matCellDef="let row">
+                      <span class="badge-chip" [ngClass]="row.status?.toLowerCase()">{{ row.status }}</span>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>Actions</th>
+                    <td mat-cell *matCellDef="let row">
+                      <button mat-stroked-button color="warn" (click)="deactivateEmployee(row.employeeId)" *ngIf="row.status === 'ACTIVE'">
+                        Deactivate
+                      </button>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- Tab 2: Work Shift Schedules -->
+    <mat-tab label="Work Shifts">
+      <ng-template matTabLabel>
+        <mat-icon class="tab-icon">schedule</mat-icon> Work Shifts
+      </ng-template>
+
+      <div class="tab-content">
+        <div class="admin-grid">
+          <mat-card class="form-card">
+            <mat-card-header>
+              <mat-card-title><mat-icon>add_alarm</mat-icon> Create Work Shift</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <form [formGroup]="shiftForm" (ngSubmit)="createShift()" class="vertical-form">
+                <mat-form-field appearance="outline">
+                  <mat-label>Shift Title</mat-label>
+                  <input matInput formControlName="shiftName" placeholder="e.g. Morning Shift">
+                </mat-form-field>
+
+                <div class="date-row">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Start Time</mat-label>
+                    <input matInput formControlName="startTime" type="time">
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>End Time</mat-label>
+                    <input matInput formControlName="endTime" type="time">
+                  </mat-form-field>
+                </div>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Grace Minutes (Late Threshold)</mat-label>
+                  <input matInput type="number" formControlName="graceMinutes">
+                  <span matSuffix>mins</span>
+                </mat-form-field>
+
+                <button mat-raised-button color="primary" type="submit" class="submit-btn">
+                  <mat-icon>save</mat-icon> Save Work Shift
+                </button>
+              </form>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Shift List -->
+          <mat-card class="table-card">
+            <mat-card-header>
+              <mat-card-title><mat-icon>list</mat-icon> Configured Work Shifts</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="list-container">
+                <div *ngFor="let s of shifts" class="list-item-card">
+                  <div class="item-icon-box"><mat-icon>schedule</mat-icon></div>
+                  <div class="item-details">
+                    <span class="item-title">{{ s.shiftName }}</span>
+                    <span class="item-sub">{{ s.startTime }} &mdash; {{ s.endTime }} (Grace: {{ s.graceMinutes }} mins)</span>
+                  </div>
+                  <button mat-icon-button color="warn" (click)="deleteShift(s.shiftId)" matTooltip="Delete Shift">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- Tab 3: Company Holiday Calendar -->
+    <mat-tab label="Holidays">
+      <ng-template matTabLabel>
+        <mat-icon class="tab-icon">event</mat-icon> Holidays
+      </ng-template>
+
+      <div class="tab-content">
+        <div class="admin-grid">
+          <mat-card class="form-card">
+            <mat-card-header>
+              <mat-card-title><mat-icon>event_available</mat-icon> Add Company Holiday</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <form [formGroup]="holidayForm" (ngSubmit)="createHoliday()" class="vertical-form">
+                <mat-form-field appearance="outline">
+                  <mat-label>Holiday Name</mat-label>
+                  <input matInput formControlName="holidayName" placeholder="e.g. Independence Day">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Holiday Date</mat-label>
+                  <input matInput type="date" formControlName="holidayDate">
+                </mat-form-field>
+
+                <button mat-raised-button color="primary" type="submit" class="submit-btn">
+                  <mat-icon>add</mat-icon> Add Holiday
+                </button>
+              </form>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Holiday List -->
+          <mat-card class="table-card">
+            <mat-card-header>
+              <mat-card-title><mat-icon>calendar_today</mat-icon> Official Holiday List</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="list-container">
+                <div *ngFor="let h of holidays" class="list-item-card">
+                  <div class="item-icon-box amber-box"><mat-icon>beach_access</mat-icon></div>
+                  <div class="item-details">
+                    <span class="item-title">{{ h.holidayName }}</span>
+                    <span class="item-sub">{{ h.holidayDate | date:'fullDate' }}</span>
+                  </div>
+                  <button mat-icon-button color="warn" (click)="deleteHoliday(h.holidayId)" matTooltip="Delete Holiday">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>
 </div>

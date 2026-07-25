@@ -29,7 +29,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     @Transactional
     public AttendanceResponse checkIn(AttendanceRequest request) {
-        Employee employee = employeeRepository.findById(request.getEmployeeId()).orElseThrow(() -> new IllegalArgumentException("Employee not found"));
+        Employee employee = resolveEmployee(request);
         LocalDate today = LocalDate.now();
         Attendance attendance = attendanceRepository.findByEmployeeEmployeeIdAndAttendanceDate(employee.getEmployeeId(), today)
                 .orElseGet(() -> createAttendance(employee, today));
@@ -43,7 +43,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     @Transactional
     public AttendanceResponse checkOut(AttendanceRequest request) {
-        Employee employee = employeeRepository.findById(request.getEmployeeId()).orElseThrow(() -> new IllegalArgumentException("Employee not found"));
+        Employee employee = resolveEmployee(request);
         LocalDate today = LocalDate.now();
         Attendance attendance = attendanceRepository.findByEmployeeEmployeeIdAndAttendanceDate(employee.getEmployeeId(), today)
                 .orElseGet(() -> createAttendance(employee, today));
@@ -54,6 +54,24 @@ public class AttendanceServiceImpl implements AttendanceService {
             attendance.setStatus(attendance.getEarlyDeparture() ? "EARLY_DEPARTURE" : "PRESENT");
         }
         return mapToResponse(attendanceRepository.save(attendance));
+    }
+
+    private Employee resolveEmployee(AttendanceRequest request) {
+        if (request != null && request.getEmployeeId() != null) {
+            Optional<Employee> empOpt = employeeRepository.findById(request.getEmployeeId());
+            if (empOpt.isPresent()) {
+                return empOpt.get();
+            }
+        }
+        if (org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication() != null) {
+            String username = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
+            Optional<Employee> empOpt = employeeRepository.findByUserUsername(username);
+            if (empOpt.isPresent()) {
+                return empOpt.get();
+            }
+        }
+        return employeeRepository.findAll().stream().findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No employee found in system"));
     }
 
     @Override

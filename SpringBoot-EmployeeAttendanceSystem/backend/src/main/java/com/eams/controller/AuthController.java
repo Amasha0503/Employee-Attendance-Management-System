@@ -33,17 +33,26 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest request) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-        );
+    public ResponseEntity<?> login(@Valid @RequestBody AuthRequest request) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+            );
 
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
-        String role = user.getRole() != null ? user.getRole().getRoleName() : "EMPLOYEE";
-        String token = jwtUtil.generateToken(user.getUsername(), role);
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
+            String role = user.getRole() != null ? user.getRole().getRoleName() : "EMPLOYEE";
+            String token = jwtUtil.generateToken(user.getUsername(), role);
 
-        return ResponseEntity.ok(new AuthResponse(token, user.getUsername(), role));
+            return ResponseEntity.ok(new AuthResponse(token, user.getUsername(), role));
+        } catch (org.springframework.security.authentication.BadCredentialsException e) {
+            System.err.println("Login failed: Bad credentials for username: " + request.getUsername());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+        } catch (Exception e) {
+            System.err.println("Login error: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     @PostMapping("/register")

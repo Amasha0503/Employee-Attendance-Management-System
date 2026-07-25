@@ -1,3 +1,150 @@
-.attendance-shell { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
-.actions { display: flex; gap: 12px; }
-table { width: 100%; }
+.attendance-shell {
+  padding: 2rem 1.5rem;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.header-section h2 {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.25rem;
+}
+
+.subtitle {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin: 0 0 2rem;
+}
+
+.clock-card {
+  padding: 2rem;
+  border-radius: 20px !important;
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%) !important;
+  color: white;
+  margin-bottom: 2rem;
+  box-shadow: 0 20px 30px -10px rgba(30, 27, 75, 0.35) !important;
+}
+
+.clock-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.time-display {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.clock-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+}
+
+.clock-icon mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+.time-text {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.date-text {
+  font-size: 0.95rem;
+  color: #c7d2fe;
+  font-weight: 500;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.check-btn {
+  height: 52px !important;
+  padding: 0 1.75rem !important;
+  font-size: 1rem !important;
+  border-radius: 14px !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.in-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+}
+
+.out-btn {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706) !important;
+}
+
+.table-card {
+  padding: 1.5rem;
+  border-radius: 20px !important;
+}
+
+.table-header {
+  margin-bottom: 1.25rem;
+}
+
+.table-header mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.modern-table {
+  width: 100%;
+}
+
+.bold-text {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.flag-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+}
+
+.flag-tag mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.late-tag { background: #fef3c7; color: #b45309; }
+.early-tag { background: #e0f2fe; color: #0369a1; }
+.normal-tag { background: #f1f5f9; color: #475569; }
+
+.table-row:hover {
+  background-color: #f8fafc;
+}
